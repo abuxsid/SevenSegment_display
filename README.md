@@ -21,11 +21,58 @@ Save and Document Results Save your project by clicking File → Save Project. T
 Close the Simulation Once done, by going to Simulation → "Close Simulation
 
 Input/Output Signal Diagram:
+<img width="1917" height="1069" alt="Screenshot 2025-09-03 102741" src="https://github.com/user-attachments/assets/9bc24188-c490-45e7-b14f-2dde48aa6ebe" />
 
 RTL Code:
-
+```
+module bcdto7seg(
+    input  [3:0] bcd,
+    output reg [6:0] seg
+);
+    always @ (bcd) begin
+        case (bcd)
+            4'b0000: seg = 7'b0111111;
+            4'b0001: seg = 7'b0000110;
+            4'b0010: seg = 7'b1011011;
+            4'b0011: seg = 7'b1001111;
+            4'b0100: seg = 7'b1100110;
+            4'b0101: seg = 7'b1101101;
+            4'b0110: seg = 7'b1111101;
+            4'b0111: seg = 7'b0000111;
+            4'b1000: seg = 7'b1111111;
+            4'b1001: seg = 7'b1101111; 
+            default: seg = 7'b0000000;
+        endcase
+    end
+endmodule
+```
 TestBench:
+```
+`timescale 1ns/1ps
 
+module bcdto7seg_tb;
+    reg [3:0] bcd_t;
+    wire [6:0] seg_t;
+
+    // Instantiate DUT
+    bcdto7seg dut (.bcd(bcd_t), .seg(seg_t));
+
+    initial begin
+        bcd_t = 4'd0;  #100;
+        bcd_t = 4'd1;  #100;
+        bcd_t = 4'd2;  #100;
+        bcd_t = 4'd3;  #100;
+        bcd_t = 4'd4;  #100;
+        bcd_t = 4'd5;  #100;
+        bcd_t = 4'd6;  #100;
+        bcd_t = 4'd7;  #100;
+    end
+endmodule
+
+```
 Output waveform:
+<img width="1909" height="1074" alt="Screenshot 2025-09-03 101346" src="https://github.com/user-attachments/assets/c46c7355-8be5-41a1-a40e-7ba829abb2a9" />
+
 
 Conclusion:
+In this experiment, a Seven Segment Display driver was successfully designed and simulated using Verilog HDL. The design correctly decoded 4-bit BCD inputs into seven-segment outputs, enabling the display of digits 0–9. The simulation results verified the correct functionality of the display, with all inputs producing the expected segment patterns.
